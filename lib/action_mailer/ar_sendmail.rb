@@ -42,7 +42,7 @@ class ActionMailer::ARSendmail
   ##
   # The version of ActionMailer::ARSendmail you are running.
 
-  VERSION = '2.1.5'
+  VERSION = '2.1.6'
 
   ##
   # Maximum number of times authentication will be consecutively retried
@@ -385,7 +385,7 @@ class ActionMailer::ARSendmail
                 [email.id, e.message, e.class, e.backtrace.join("\n\t")]
           email.destroy
           session.reset
-        rescue Net::SMTPServerBusy, Net::SMTPUnknownError, Net::SMTPSyntaxError, TimeoutError => e
+        rescue Net::SMTPServerBusy, Net::SMTPUnknownError, Net::SMTPSyntaxError, TimeoutError, Timeout::Error => e
           email.last_send_attempt = Time.now.to_i
           email.save rescue nil
           log "error sending email %d: %p(%s):\n\t%s" %
