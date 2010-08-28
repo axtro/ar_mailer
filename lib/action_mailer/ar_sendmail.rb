@@ -42,7 +42,7 @@ class ActionMailer::ARSendmail
   ##
   # The version of ActionMailer::ARSendmail you are running.
 
-  VERSION = '2.1.6'
+  VERSION = '2.2.0'
 
   ##
   # Maximum number of times authentication will be consecutively retried
