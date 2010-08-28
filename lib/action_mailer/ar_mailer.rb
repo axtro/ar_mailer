@@ -3,29 +3,19 @@
 # ActionMailer.
 #
 
-class ActionMailer::Base
-
-  ##
-  # Set the email class for deliveries. Handle class reloading issues which prevents caching the email class.
-  #
-  @@email_class_name = 'Email'
-
-  def self.email_class=(klass)
-    @@email_class_name = klass.to_s
+class ARMailer
+    
+  def initialize(options)
+    self.email_class = options[:email_class] || Email
   end
-
-  def self.email_class
-    @@email_class_name.constantize
-  end
-
-  ##
-  # Adds +mail+ to the Email table.  Only the first From address for +mail+ is
-  # used.
-
-  def perform_delivery_activerecord(mail)
-    mail.destinations.each do |destination|
-      self.class.email_class.create :mail => mail.encoded, :to => destination, :from => mail.from.first
+  
+  attr_accessor :email_class_name, :email_class
+  
+  def deliver!(mail)
+    destinations = mail.destinations
+    sender = mail.return_path || mail.sender || mail.from_addrs.first
+    destinations.each do |destination|
+      self.email_class.create :mail => mail.encoded, :to => destination, :from => sender
     end
   end
-
 end
